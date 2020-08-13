@@ -38,19 +38,19 @@ class User(Resource):
     @app.route('/api/v1/users/',  methods=['GET'])
     @app.route('/api/v1/users',  methods=['GET'])
     def getall():
-        return jsonify({"message":"affichages des utilisateurs","users":users})
+        return jsonify({"message":"affichage des utilisateurs","users":users})
 
     def get(self, id):
         for user in users:
             if(id == user["id"]):
                 return user, 200
         return "User not found", 404
-    #@app.route('/api/v1/users', methods=['POST'])
-    def post(self,id):
-        parser = reqparse.RequestParser()
-        parser.add_argument("login")
-        parser.add_argument("password")
-        args = parser.parse_args()
+    @app.route('/api/v1/users', methods=['POST'])
+    def post():
+        id = request.args.get("id")
+        login = request.args.get("login")
+        password = request.args.get("password")
+        
         
         for user in users:
             if(id == user["id"]):
@@ -58,24 +58,24 @@ class User(Resource):
 
         user = {
             "id": id,
-            "login": args["login"],
-            "password": args["password"]
+            "login": login,
+            "password": password
         }
                      
 
         users.append(user)
         return user, 201
-
-    def put(self, id):
-        parser = reqparse.RequestParser()
-        parser.add_argument("login")
-        parser.add_argument("password")
-        args = parser.parse_args()
+    @app.route('/api/v1/users', methods=['PUT'])
+    def put():
+        id = request.args.get("id")
+        login = request.args.get("login")
+        password = request.args.get("password")
+        
 
         for user in users:
             if(id == user["id"]):
-                user["login"] = args["login"]
-                user["password"] = args["password"]
+                user["login"] = login
+                user["password"] = password
                 return user, 200
         user = {
             "id": id,
